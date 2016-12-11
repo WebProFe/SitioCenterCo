@@ -1,34 +1,42 @@
 <?php 
-include "connect_database.php";
+require('DatabaseConnection.php');
+require("__UserQueryHelper.php");
+require("__Redirect.php");
 
- if(isset($_POST['submit'])) {
+ $success;
+
+ if(validInput()) {
 
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Check the data, and if display an error if the data does not validate.
-    if (empty($username) OR empty($password)) {
-        header("Location: http://www.sitiocenter.com/index.php?success=-1#form");
-        exit;
-    }
+    //Create database connection
+    $myConnection = new DatabaseConnection;
+    $myConnection->createConnection();
+
+    //Call static method from __UserQueryHelper by passing the connection, username and password
+    //Save the result from it on variable success, either 1 or -1
+    $success = (__UserQueryHelper::insertUser($myConnection->getConnection(), $username, $password) ? 1 : -1);
+ }
+ //Call redirect to home method from __Redirect class
+ __Redirect::toHome("?success="+$success);
+
+ exit();
 
 
-    // Create a variable for the query that will be used to insert the date inside the table.  
-    //TODO : Check for SQL injection
-    $query="INSERT INTO
-    users(username, password)
-    VALUES
-    ('$username', '$password')
-    ";
 
-     // Use a predefined function to run the query.
-     mysqli_query($connection, $query);
 
-     // Use a predefined functin to finish running the query.
-     mysql_close();
 
-     // Displays a success message if process finishes sucessfully.
-     header("Location: http://www.sitiocenter.com/index.php?success=1#form");
+ /**
+ * This method validates if the submit button, the username and the password
+ * were correctly set, if they are, then it returns true else false 
+ */
+ function validInput() {
+    $submittedButton = $_POST['submit'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    return ($submittedButton && !empty($username) && !empty($password));
  }
 
 ?>
