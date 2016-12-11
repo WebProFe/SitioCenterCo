@@ -1,9 +1,11 @@
     
 <?php
+
 require_once('php/DatabaseConnection.php');
 $myConnection = new DatabaseConnection;
 $myConnection->createConnection();
 echo "si le gusto!";
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
