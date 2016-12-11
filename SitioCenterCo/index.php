@@ -1,9 +1,3 @@
-    
-<?php
-require_once('php/DatabaseConnection.php');
-$myConnection = new DatabaseConnection;
-$myConnection->createConnection();
-?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
