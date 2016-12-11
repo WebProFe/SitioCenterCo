@@ -3,7 +3,6 @@
 require_once('php/DatabaseConnection.php');
 $myConnection = new DatabaseConnection;
 $myConnection->createConnection();
-echo "si le gusto!";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,22 +27,27 @@ echo "si le gusto!";
                 <p>This is my log in System</p>
                     <form class="rsvp-form"  action="php/create_database.php" method="POST" enctype="multipart/form-data">
                         <?php
-                        if($_GET['success'] == 1){
-                            echo"<div class=\"form-messages success\">Thank you, your RSVP information has been sent.</div>";
+
+                        if (isset($_GET['success'])) {
+                            if ($_GET['success'] == 1) {
+                                echo"<div class=\"form-messages success\">Thank you, your RSVP information has been sent.</div>";
+                            }
+                            else {
+                                echo"<div class=\"form-messages error\">Oops! Something went wrong. Please try again.</div>";
+                            }
                         }
-                        if($_GET['success']== -1 ){
-                            echo"<div class=\"form-messages error\">Oops! Something went wrong. Please try again.</div>";
+                        else {
+                        ?>
+                          <label for="username">Username</label><br>
+                          <input type="text" id="username" name="username" placeholder="TYPE USERNAME" required><br>
+
+                          <label for="password">Password</label><br>
+                          <input type="password" id="password" name="password" placeholder="TYPE PASSWORD" required><br>
+
+                          <input type="submit" value="Submit" name="submit">
+                        <?php
                         }
                         ?>
-
-
-                      <label for="username">Username</label><br>
-                      <input type="text" id="username" name="username" placeholder="TYPE USERNAME" required><br>
-
-                      <label for="password">Password</label><br>
-                      <input type="password" id="password" name="password" placeholder="TYPE PASSWORD" required><br>
-
-                      <input type="submit" value="Submit" name="submit">
                     </form>
 
             </div>

@@ -1,5 +1,7 @@
 <?php 
-include "connect_database.php";
+require('DatabaseConnection.php');
+require("__UserQueryHelper.php");
+require("__Redirect.php");
 
  if(isset($_POST['submit'])) {
 
@@ -8,27 +10,20 @@ include "connect_database.php";
 
     // Check the data, and if display an error if the data does not validate.
     if (empty($username) OR empty($password)) {
-        header("Location: http://www.sitiocenter.com/index.php?success=-1#form");
+        __Redirect::toHome("?success=-1");
         exit;
     }
 
+    $myConnection = new DatabaseConnection;
+    $myConnection->createConnection();
 
-    // Create a variable for the query that will be used to insert the date inside the table.  
-    //TODO : Check for SQL injection
-    $query="INSERT INTO
-    users(username, password)
-    VALUES
-    ('$username', '$password')
-    ";
-
-     // Use a predefined function to run the query.
-     mysqli_query($connection, $query);
-
-     // Use a predefined functin to finish running the query.
-     mysql_close();
-
-     // Displays a success message if process finishes sucessfully.
-     header("Location: http://www.sitiocenter.com/index.php?success=1#form");
+    __UserQueryHelper::insertUser($myConnection->getConnection(), $username, $password);
+    __Redirect::toHome("?success=1");
+    exit();
+ }
+ else {
+    __Redirect::toHome("?success=-1");
+    exit();
  }
 
 ?>
